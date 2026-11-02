@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>أسناننا – حجز مواعيد الأسنان</title>
+<style>
+:root{--bg:#eef3fb;--card:#fff;--ink:#14213d;--mut:#6b7a99;--pri:#1736c4;--pri2:#0b2a8f;--soft:#e4ecff;--line:#dbe3f3;--ok:#16a34a;--bad:#d93a3a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1324;--card:#172038;--ink:#eaf0ff;--mut:#9aa8c9;--pri:#4d6bff;--pri2:#2b44c9;--soft:#1f2c52;--line:#2a3658;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1324;--card:#172038;--ink:#eaf0ff;--mut:#9aa8c9;--pri:#4d6bff;--pri2:#2b44c9;--soft:#1f2c52;--line:#2a3658;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Sans Arabic",Arial,sans-serif}
+#app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.hero{background:linear-gradient(135deg,var(--pri2),var(--pri));color:#fff;margin:14px;padding:20px;border-radius:20px}
+.hero h1{margin:0 0 6px;font-size:26px}.hero p{margin:0;opacity:.9;font-size:14px}
+.page{flex:1;padding:0 14px 90px}
+.card{background:var(--card);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 2px 10px #0001}
+h2{font-size:17px;margin:0 0 12px}label{display:block;font-size:13px;color:var(--mut);margin:12px 0 6px}
+input{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.opt{padding:13px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;cursor:pointer;text-align:center}
+.opt.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.btn{width:100%;padding:14px;border:0;border-radius:14px;background:var(--pri);color:#fff;font:inherit;font-weight:700;cursor:pointer;margin-top:14px}
+.btn.alt{background:var(--pri2)}.btn.line{background:transparent;color:var(--pri);border:1.5px solid var(--pri)}.btn.sm{width:auto;padding:9px 18px;margin:0}
+.btn:disabled{opacity:.45}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.tile{background:var(--card);border-radius:18px;padding:18px;text-align:center;box-shadow:0 2px 10px #0001;cursor:pointer;border:0;color:var(--ink);font:inherit}
+.tile b{display:block;font-size:30px;color:var(--pri)}.tile span{font-size:13px;color:var(--mut)}
+.err{color:var(--bad);font-size:12px;margin-top:4px;min-height:14px}
+.bmi{font-size:34px;font-weight:800;color:var(--pri)}.tag{display:inline-block;background:var(--soft);color:var(--pri);border-radius:8px;padding:3px 9px;font-size:12px}
+.clinic h3{margin:0 0 4px;font-size:16px}.m{color:var(--mut);font-size:13px;margin:3px 0}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.days .opt{min-width:74px}.opt.off{opacity:.35;text-decoration:line-through;pointer-events:none}
+nav{position:fixed;bottom:0;left:0;right:0;max-width:430px;margin:0 auto;background:var(--card);display:flex;border-top:1px solid var(--line);padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;background:none;border:0;color:var(--mut);font:inherit;font-size:12px;padding:6px;cursor:pointer}nav button.on{color:var(--pri);font-weight:700}nav i{display:block;font-style:normal;font-size:20px}
+.top{display:flex;align-items:center;gap:10px;padding:14px}.top button{background:var(--soft);color:var(--pri);border:0;border-radius:10px;width:36px;height:36px;font-size:18px;cursor:pointer}.top h2{margin:0}
+.ok{text-align:center;font-size:44px}.kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.kv:last-child{border:0}
+</style>
+</head>
+<body><div id="app"></div>
+<script>
+const CL=[{id:1,n:"مستشفى الشفاء لطب الأسنان",a:"حي الروضة، جدة",d:2.1,r:4.8,s:["تنظيف","تبييض","حشوات","زراعة","طوارئ"]},
+{id:2,n:"عيادة الراحة",a:"حي السلامة، جدة",d:4.5,r:4.6,s:["تنظيف","تقويم","حشوات"]},
+{id:3,n:"مجمع ابتسامة الطبي",a:"حي الحمراء، جدة",d:6.2,r:4.7,s:["تقويم","زراعة","خلع","طوارئ"]}];
+const TIMES=["09:00 ص","10:30 ص","11:30 ص","01:00 م","03:30 م","05:00 م"];
+const S={u:null,ap:[],tab:"home",scr:"main",c:null,day:null,t:null,svc:null,g:"",df:"",last:null};
+try{const x=JSON.parse(localStorage.getItem("asn")||"null");if(x){S.u=x.u;S.ap=x.ap||[]}}catch(e){}
+const save=()=>{try{localStorage.setItem("asn",JSON.stringify({u:S.u,ap:S.ap}))}catch(e){}};
+const $=s=>document.querySelector(s),A=$("#app");
+const days=()=>[...Array(5)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i+1);return{k:d.toISOString().slice(0,10),l:d.toLocaleDateString("ar-SA",{weekday:"short",day:"numeric",month:"short"})}});
+const taken=(c,d,t)=>S.ap.some(a=>a.c==c&&a.day==d&&a.t==t)||((c*7+d.charCodeAt(9)+t.charCodeAt(1))%4==0);
+function go(o){Object.assign(S,o);draw()}
+function nav(){const t=[["home","🏠","الرئيسية"],["clinics","🦷","العيادات"],["appts","📅","مواعيدي"],["me","👤","ملفي"]];
+return `<nav>${t.map(x=>`<button class="${S.tab==x[0]&&S.scr=="main"?"on":""}" onclick="go({tab:'${x[0]}',scr:'main'})"><i>${x[1]}</i>${x[2]}</button>`).join("")}</nav>`}
+function bmi(u){const v=u.w/((u.h/100)**2);return{v:v.toFixed(1),l:v<18.5?"نحافة":v<25?"وزن طبيعي":v<30?"وزن زائد":"سمنة"}}
+function signup(){return `<div class="hero"><h1>أسناننا 🦷</h1><p>احجز موعدك من البيت في دقيقة، بدون زحام وبدون اتصال.</p></div>
+<div class="page"><div class="card"><h2>ابدأ بإنشاء ملفك الشخصي</h2>
+<label>الاسم</label><input id="nm" placeholder="اسمك الكامل"><div class="err" id="e1"></div>
+<label>الجنس</label><div class="row">${["أنثى","ذكر"].map(x=>`<button class="opt ${S.g==x?"on":""}" onclick="S.g='${x}';sync()">${x}</button>`).join("")}</div>
+<label>البريد الإلكتروني</label><input id="em" type="email" inputmode="email" dir="ltr" placeholder="name@example.com">
+<label>رقم الجوال</label><input id="ph" type="tel" inputmode="tel" dir="ltr" placeholder="05xxxxxxxx">
+<div class="err" id="e2"></div><button class="btn" onclick="start()">ابدأ الآن</button></div></div>`}
+let tmp={nm:"",h:"",w:""};
+function sync(){tmp={nm:$("#nm").value,em:$("#em").value,ph:$("#ph").value};draw();$("#nm").value=tmp.nm;$("#em").value=tmp.em;$("#ph").value=tmp.ph}
+function start(){const nm=$("#nm").value.trim(),em=$("#em").value.trim(),ph=$("#ph").value.replace(/[\s-]/g,"");
+$("#e1").textContent=nm.length<3?"أدخل اسمك (3 أحرف على الأقل)":"";
+$("#e2").textContent=!S.g?"اختر الجنس":!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)?"أدخل بريداً إلكترونياً صحيحاً":!/^\+?\d{9,14}$/.test(ph)?"أدخل رقم جوال صحيح":"";
+if(nm.length<3||$("#e2").textContent)return;S.u={nm,g:S.g,em,ph};save();go({tab:"home"})}
+function home(){const u=S.u,up=S.ap.length;
+const tip=["قلّل السكريات والمشروبات الغازية.","نظّف أسنانك بالفرشاة والخيط مرتين يومياً.","زُر طبيب الأسنان كل 6 أشهر للفحص الدوري."];
+return `<div class="hero" style="margin:14px 0"><p>أهلاً بك،</p><h1>${u.nm}</h1><p>${up?`لديك ${up} موعد قادم`:"لا توجد مواعيد قادمة. احجز الآن من مكانك."}</p></div>
+<div class="grid"><button class="tile" onclick="go({tab:'clinics'})"><b>📅</b>احجز موعداً<br><span>من البيت</span></button><button class="tile" onclick="go({tab:'appts'})"><b>${up}</b>مواعيدي<br><span>قادمة</span></button></div>
+<div class="card"><span class="tag">بياناتي</span><div class="m" style="margin-top:8px">📧 ${u.em}</div><div class="m">📱 ${u.ph}</div></div>
+<div class="card"><h2>نصائح لصحة الفم</h2>${tip.map(x=>`<div class="m">• ${x}</div>`).join("")}</div>`}
+function clinics(){return `<h2 style="margin:16px 2px 4px">أقرب العيادات والمشافي</h2>`+CL.map(c=>`<div class="card clinic"><h3>${c.n}</h3><div class="m">📍 ${c.a} · ${c.d} كم · ⭐ ${c.r}</div><div class="m">${c.s.join(" · ")}</div><button class="btn sm" onclick="go({scr:'detail',c:${c.id},day:null,t:null,svc:null})">احجز موعد</button></div>`).join("")}
+function detail(){const c=CL.find(x=>x.id==S.c),D=days();if(!S.day)S.day=D[0].k;
+return `<div class="top"><button onclick="go({scr:'main',tab:'clinics'})">→</button><h2>تفاصيل العيادة والحجز</h2></div><div class="page" style="padding-bottom:30px">
+<div class="card"><h3 style="margin:0 0 6px">${c.n}</h3><div class="m">📍 ${c.a} · ⭐ ${c.r}</div><div class="m">🕒 السبت – الخميس: 10:00 ص – 10:00 م</div></div>
+<div class="card"><h2>الخدمة</h2><div class="slots">${c.s.map(x=>`<button class="opt ${S.svc==x?"on":""}" onclick="go({svc:'${x}'})">${x}</button>`).join("")}</div>
+<h2 style="margin-top:16px">اليوم</h2><div class="days">${D.map(d=>`<button class="opt ${S.day==d.k?"on":""}" onclick="go({day:'${d.k}',t:null})">${d.l}</button>`).join("")}</div>
+<h2 style="margin-top:16px">الوقت</h2><div class="slots">${TIMES.map(t=>`<button class="opt ${S.t==t?"on":""} ${taken(c.id,S.day,t)?"off":""}" onclick="go({t:'${t}'})">${t}</button>`).join("")}</div>
+<button class="btn" ${S.t&&S.svc?"":"disabled"} onclick="book()">تأكيد الحجز</button></div></div>`}
+function book(){const c=CL.find(x=>x.id==S.c);const a={id:"#0"+Math.floor(1e6+Math.random()*9e6),c:c.id,cn:c.n,a:c.a,day:S.day,t:S.t,svc:S.svc,u:S.u.nm};S.ap.push(a);S.last=a;save();go({scr:"done"})}
+function done(){const a=S.last;return `<div class="top"><h2>تأكيد الحجز</h2></div><div class="page"><div class="card"><div class="ok">✅</div><h2 style="text-align:center">تم تأكيد الحجز بنجاح</h2>
+${[["العيادة",a.cn],["المنطقة",a.a],["الخدمة",a.svc],["التاريخ",new Date(a.day).toLocaleDateString("ar-SA",{weekday:"long",day:"numeric",month:"long"})],["الوقت",a.t],["اسم المريض",a.u],["رقم الحجز",a.id]].map(x=>`<div class="kv"><span class="m">${x[0]}</span><b>${x[1]}</b></div>`).join("")}
+<button class="btn" onclick="go({scr:'main',tab:'appts'})">عرض الحجز</button><button class="btn alt" onclick="go({scr:'main',tab:'home'})">العودة للرئيسية</button></div></div>`}
+function appts(){return `<h2 style="margin:16px 2px 4px">مواعيدي (${S.ap.length})</h2>`+(S.ap.length?S.ap.map((a,i)=>`<div class="card"><b>${a.cn}</b><div class="m">${a.svc} · ${new Date(a.day).toLocaleDateString("ar-SA",{weekday:"long",day:"numeric",month:"long"})} · ${a.t}</div><div class="m">رقم الحجز ${a.id}</div><button class="btn line sm" style="margin-top:8px" onclick="S.ap.splice(${i},1);save();draw()">إلغاء الموعد</button></div>`).join(""):`<div class="card m">لا توجد مواعيد بعد. اذهب إلى العيادات واحجز موعدك الأول.</div>`)}
+function me(){const u=S.u;return `<h2 style="margin:16px 2px 4px">ملفي</h2><div class="card">${[["الاسم",u.nm],["الجنس",u.g],["البريد الإلكتروني",u.em],["رقم الجوال",u.ph]].map(x=>`<div class="kv"><span class="m">${x[0]}</span><b>${x[1]}</b></div>`).join("")}<button class="btn line" onclick="if(confirm('حذف الملف وكل المواعيد؟')){S.u=null;S.ap=[];S.g='';save();draw()}">تسجيل الخروج</button></div>`}
+function draw(){
+if(!S.u||!S.u.em){A.innerHTML=signup();return}
+if(S.scr=="detail"){A.innerHTML=detail();return}
+if(S.scr=="done"){A.innerHTML=done();return}
+A.innerHTML=`<div class="page">${{home,clinics,appts,me}[S.tab]()}</div>`+nav();scrollTo(0,0)}
+draw();
+</script></body></html>
